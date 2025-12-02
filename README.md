@@ -82,18 +82,4 @@ const CONTRACT_ADDRESS = '0xVotreAdresseRemix';
 const ABI = [ /* ABI JSON copié Remix */ ];
 ```
 
-## 🧪 **Tests (Remix)**
 
-```
-✅ monSolde() → 0.0 → deposer(1 ETH) → 1.0
-✅ creerMatch("PSG","OM") → numeroMatch=1
-✅ parier(1,0,0.5) → solde=0.5
-✅ fixerResultat(1,0) → gains ~0.95 ETH 
-``
-
-
-
-## 📄 **Licence**
-MIT - Copiez, modifiez, déployez !
-
-***
