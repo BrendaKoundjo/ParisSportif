@@ -1,16 +1,99 @@
-# React + Vite
+# Paris Sportifs Web3 - README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+##  **Description**
+Site de paris sportifs décentralisé sur Ethereum. Créez des matchs, pariez avec ETH, recevez gains automatiques (5% fee). Contrat Solidity + Frontend React.
 
-Currently, two official plugins are available:
+## **Prérequis**
+- **Node.js** 18+ (`node --version`)
+- **Navigateur** Chrome/Brave + MetaMask
+- **Git** (optionnel)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  **Installation (5 min)**
 
-## React Compiler
+```bash
+# 1. Cloner / Télécharger projet
+git clone https://github.com/BrendaKoundjo/ParisSportif.git
+cd ParisSportifs
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# 2. Installer dépendances
+npm install
 
-## Expanding the ESLint configuration
+# 3. Lancer frontend
+npm run dev
+```
+→ **http://localhost:3000** 
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+##  **Déployer Contrat (Remix)**
+
+1. **https://remix.ethereum.org**
+2. Créer 3 fichiers :
+   ```
+   contracts/
+   ├── Wallet.sol
+   ├── MatchManagement.sol
+   └── SportsBetting.sol
+   ```
+3. **Compiler** → Solidity 0.8.20
+4. **Deploy** → **Injected Provider - MetaMask** → **Sepolia**
+5.  **COPIER** : Adresse contrat + ABI
+
+## **Configurer MetaMask**
+
+### **Ajouter Sepolia**
+```
+https://chainlist.org → "Sepolia" → "Add to MetaMask"
+OU Manuel :
+RPC: https://rpc.sepolia.org
+Chain ID: 11155111
+```
+
+### **ETH Gratuit**
+```
+https://sepoliafaucet.com → Votre adresse → 1 ETH TEST
+```
+
+## 🎮 **Utilisation**
+
+```
+1. localhost:3000 → "Connecter Wallet"
+2. deposer() → 0.5 ETH (Metamask → Contrat)
+3. Créer Match → "PSG vs OM" (Match #1)
+4. Parier → Match 1, PSG, 0.1 ETH
+5. Fixer Résultat → Match 1, PSG gagne
+6.  Gains automatiques ! (~0.47 ETH)
+```
+
+##  **Structure Projet**
+
+```
+paris-sportifs/
+├── contracts/           # Solidity (3 fichiers)
+├── src/
+│   ├── App.js          # Frontend principal
+│   └── App.css         # Design
+├── public/
+└── package.json
+```
+
+##  **Configuration App.js**
+
+```jsx
+const CONTRACT_ADDRESS = '0xVotreAdresseRemix';
+const ABI = [ /* ABI JSON copié Remix */ ];
+```
+
+## 🧪 **Tests (Remix)**
+
+```
+✅ monSolde() → 0.0 → deposer(1 ETH) → 1.0
+✅ creerMatch("PSG","OM") → numeroMatch=1
+✅ parier(1,0,0.5) → solde=0.5
+✅ fixerResultat(1,0) → gains ~0.95 ETH 
+``
+
+
+
+## 📄 **Licence**
+MIT - Copiez, modifiez, déployez !
+
+***
