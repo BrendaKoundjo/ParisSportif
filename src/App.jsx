@@ -3,398 +3,570 @@ import { ethers } from 'ethers';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 
-const CONTRACT_ADDRESS = '0xf8e81D47203A594245E36C48e151709F0C19fBe8'; 
+//Ajouter contract ABI et adresse ici
+const CONTRACT_ADDRESS = '0xfA83D350f9D10BC98883A55e862Fb3fB73658611'; 
 const ABI = [
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "Depot",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "gagnant",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "GainsDistribues",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "equipe1",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "equipe2",
-        "type": "string"
-      }
-    ],
-    "name": "MatchCree",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "parieur",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "matchId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "choix",
-        "type": "uint8"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "PariPlace",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "matchId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "resultat",
-        "type": "uint8"
-      }
-    ],
-    "name": "ResultatFixe",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "Retrait",
-    "type": "event"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_equipe1",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "_equipe2",
-        "type": "string"
-      }
-    ],
-    "name": "creerMatch",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "deposer",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_matchId",
-        "type": "uint256"
-      }
-    ],
-    "name": "estTermine",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_matchId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_resultat",
-        "type": "uint8"
-      }
-    ],
-    "name": "fixerResultat",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "matchs",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "equipe1",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "equipe2",
-        "type": "string"
-      },
-      {
-        "internalType": "bool",
-        "name": "termine",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint8",
-        "name": "resultat",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "misesEquipe1",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "misesEquipe2",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "misesEgalite",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "monSolde",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_matchId",
-        "type": "uint256"
-      }
-    ],
-    "name": "nombreParis",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "numeroMatch",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_matchId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_choix",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "parier",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "parisDuMatch",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "parieur",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "montant",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "choix",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "proprio",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_montant",
-        "type": "uint256"
-      }
-    ],
-    "name": "retirer",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "soldes",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  }
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "montant",
+				"type": "uint256"
+			}
+		],
+		"name": "Depot",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "gagnant",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "montant",
+				"type": "uint256"
+			}
+		],
+		"name": "GainsDistribues",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "equipe1",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "equipe2",
+				"type": "string"
+			}
+		],
+		"name": "MatchCree",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "parieur",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "matchId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint8",
+				"name": "choix",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "montant",
+				"type": "uint256"
+			}
+		],
+		"name": "PariPlace",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "matchId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint8",
+				"name": "resultat",
+				"type": "uint8"
+			}
+		],
+		"name": "ResultatFixe",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "montant",
+				"type": "uint256"
+			}
+		],
+		"name": "Retrait",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_choix",
+				"type": "uint8"
+			}
+		],
+		"name": "calculerCote",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_choix",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_mise",
+				"type": "uint256"
+			}
+		],
+		"name": "calculerGainPotentiel",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_choix",
+				"type": "uint8"
+			}
+		],
+		"name": "calculerProba",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_equipe1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_equipe2",
+				"type": "string"
+			}
+		],
+		"name": "creerMatch",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_equipe1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_equipe2",
+				"type": "string"
+			}
+		],
+		"name": "creerMatchAvecParis",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deposer",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			}
+		],
+		"name": "estTermine",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_resultat",
+				"type": "uint8"
+			}
+		],
+		"name": "fixerResultat",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "matchs",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "equipe1",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "equipe2",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "termine",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint8",
+				"name": "resultat",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "misesEquipe1",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "misesEquipe2",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "misesEgalite",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "monSolde",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			}
+		],
+		"name": "nombreParis",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "numeroMatch",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			}
+		],
+		"name": "obtenirToutesCotes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			}
+		],
+		"name": "obtenirToutesProba",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "_choix",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_montant",
+				"type": "uint256"
+			}
+		],
+		"name": "parier",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "parisDuMatch",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "parieur",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "montant",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint8",
+				"name": "choix",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "proprio",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_montant",
+				"type": "uint256"
+			}
+		],
+		"name": "retirer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_matchId",
+				"type": "uint256"
+			}
+		],
+		"name": "simulerParis",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "soldes",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
 ];
 
 function App() {
@@ -405,6 +577,8 @@ function App() {
 
   const [solde, setSolde] = useState("0");
   const [matchs, setMatchs] = useState([]);
+  const [matchOdds, setMatchOdds] = useState({}); // {matchId: {odds: [1.5, 2.1, 5.0], probas: [40, 30, 10]}}
+  const [potentialWinning, setPotentialWinning] = useState("0");
 
   // Bankroll
   const [depositAmount, setDepositAmount] = useState("");
@@ -470,6 +644,7 @@ function App() {
       const nb = await cont.numeroMatch();
       const total = Number(nb);
       const temp = [];
+      const oddsTemp = {};
 
       for (let i = 1; i <= total; i++) {
         const m = await cont.matchs(i);
@@ -483,8 +658,34 @@ function App() {
           mises2: ethers.formatEther(m.misesEquipe2),
           misesEgalite: ethers.formatEther(m.misesEgalite),
         });
+
+        // Charger les cotes et probabilités
+        try {
+          const [cotes1, cotes2, cotes3] = await cont.obtenirToutesCotes(i);
+          const [proba1, proba2, proba3] = await cont.obtenirToutesProba(i);
+          
+          oddsTemp[i] = {
+            odds: [
+              Number(ethers.formatEther(cotes1)).toFixed(2),
+              Number(ethers.formatEther(cotes2)).toFixed(2), 
+              Number(ethers.formatEther(cotes3)).toFixed(2)
+            ],
+            probas: [
+              (Number(proba1) / 100).toFixed(1),
+              (Number(proba2) / 100).toFixed(1),
+              (Number(proba3) / 100).toFixed(1)
+            ]
+          };
+        } catch (oddsErr) {
+          console.log("Pas de cotes pour le match", i);
+          oddsTemp[i] = {
+            odds: ["1.00", "1.00", "1.00"],
+            probas: ["33.3", "33.3", "33.3"]
+          };
+        }
       }
       setMatchs(temp);
+      setMatchOdds(oddsTemp);
     } catch (err) {
       console.error("Erreur loadMatchs:", err);
     }
@@ -546,6 +747,65 @@ function App() {
       );
     }
   };
+
+  // Créer match avec paris automatiques
+  const handleCreerMatchAvecParis = async (e) => {
+    e.preventDefault();
+    if (!contract || !equipe1 || !equipe2) return;
+    try {
+      setMessage("Création du match avec paris automatiques...");
+      const tx = await contract.creerMatchAvecParis(equipe1, equipe2);
+      await tx.wait();
+      setEquipe1("");
+      setEquipe2("");
+      setMessage("Match créé avec paris automatiques ");
+      await updateUI(contract);
+    } catch (err) {
+      console.error(err);
+      setMessage(
+        "Échec de la création du match avec paris. Es-tu bien propriétaire du contrat ?"
+      );
+    }
+  };
+
+  // Simuler des paris sur un match existant
+  const handleSimulerParis = async (matchId) => {
+    if (!contract) return;
+    try {
+      setMessage("Simulation de paris en cours...");
+      const tx = await contract.simulerParis(matchId);
+      await tx.wait();
+      setMessage("Paris automatiques ajoutés ");
+      await updateUI(contract);
+    } catch (err) {
+      console.error(err);
+      setMessage("Échec de la simulation de paris.");
+    }
+  };
+
+  // Calculer gain potentiel quand l'utilisateur change sa mise
+  const updatePotentialWinning = async () => {
+    if (!contract || !matchIdBet || !montantBet || !choixBet) {
+      setPotentialWinning("0");
+      return;
+    }
+    try {
+      const weiAmount = ethers.parseEther(montantBet);
+      const gain = await contract.calculerGainPotentiel(
+        Number(matchIdBet),
+        Number(choixBet),
+        weiAmount
+      );
+      setPotentialWinning(ethers.formatEther(gain));
+    } catch (err) {
+      setPotentialWinning("0");
+    }
+  };
+
+  // Mettre à jour le gain potentiel quand les inputs changent
+  useEffect(() => {
+    updatePotentialWinning();
+  }, [matchIdBet, choixBet, montantBet, contract]);
 
   // Parier
   const handleParier = async (e) => {
@@ -800,6 +1060,28 @@ function App() {
                 </div>
               </div>
 
+              {/* Potential Winnings Display */}
+              {potentialWinning !== "0" && montantBet && (
+                <div style={{ 
+                  padding: "12px", 
+                  background: "#f0f9ff", 
+                  border: "1px solid #0ea5e9", 
+                  borderRadius: "6px", 
+                  margin: "12px 0",
+                  textAlign: "center" 
+                }}>
+                  <div style={{ fontSize: "14px", color: "#0369a1" }}>
+                    💰 Gain potentiel si tu gagnes
+                  </div>
+                  <div style={{ fontSize: "20px", fontWeight: "bold", color: "#0c4a6e" }}>
+                    {Number(potentialWinning).toFixed(4)} ETH
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#0369a1" }}>
+                    Mise: {montantBet} ETH → Gain: {Number(potentialWinning).toFixed(4)} ETH
+                  </div>
+                </div>
+              )}
+
               <button
                 type="submit"
                 className="btn"
@@ -854,6 +1136,7 @@ function App() {
               <div className="matches-list">
                 {matchs.map((m) => {
                   const badge = badgeForMatch(m);
+                  const odds = matchOdds[m.id] || { odds: ["1.00", "1.00", "1.00"], probas: ["33.3", "33.3", "33.3"] };
                   return (
                     <div key={m.id} className="match-card">
                       <div className="match-top">
@@ -870,6 +1153,54 @@ function App() {
                           {badge.label}
                         </div>
                       </div>
+
+                      {/* Odds Display */}
+                      {!m.termine && (
+                        <div style={{ 
+                          display: "grid", 
+                          gridTemplateColumns: "1fr 1fr 1fr", 
+                          gap: "8px", 
+                          margin: "12px 0",
+                          padding: "8px",
+                          background: "#f8f9fa",
+                          borderRadius: "6px"
+                        }}>
+                          <div style={{ textAlign: "center", fontSize: "12px" }}>
+                            <div style={{ fontWeight: "600", color: "#2563eb" }}>
+                              {m.equipe1}
+                            </div>
+                            <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              {odds.odds[0]}
+                            </div>
+                            <div style={{ color: "#6b7280" }}>
+                              {odds.probas[0]}%
+                            </div>
+                          </div>
+                          <div style={{ textAlign: "center", fontSize: "12px" }}>
+                            <div style={{ fontWeight: "600", color: "#dc2626" }}>
+                              {m.equipe2}
+                            </div>
+                            <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              {odds.odds[1]}
+                            </div>
+                            <div style={{ color: "#6b7280" }}>
+                              {odds.probas[1]}%
+                            </div>
+                          </div>
+                          <div style={{ textAlign: "center", fontSize: "12px" }}>
+                            <div style={{ fontWeight: "600", color: "#059669" }}>
+                              Match Nul
+                            </div>
+                            <div style={{ fontSize: "18px", fontWeight: "bold" }}>
+                              {odds.odds[2]}
+                            </div>
+                            <div style={{ color: "#6b7280" }}>
+                              {odds.probas[2]}%
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       <div className="match-status">
                         Résultat : {formatResultat(m)}
                         <br />
@@ -882,6 +1213,20 @@ function App() {
                           {m.mises2} ETH, Nul: {m.misesEgalite} ETH
                         </span>
                       </div>
+
+                      {/* Add Fake Bets Button */}
+                      {!m.termine && (
+                        <div style={{ marginTop: "8px" }}>
+                          <button
+                            type="button"
+                            className="btn-outline"
+                            style={{ fontSize: "12px", padding: "4px 8px" }}
+                            onClick={() => handleSimulerParis(m.id)}
+                          >
+                            <i className="bi bi-plus-circle"></i> Ajouter paris automatiques
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -930,13 +1275,25 @@ function App() {
                     onChange={(e) => setEquipe2(e.target.value)}
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="btn-outline"
-                  disabled={!account || !equipe1 || !equipe2}
-                >
-                  <i className="bi bi-plus-circle"></i> Créer le match
-                </button>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    type="submit"
+                    className="btn-outline"
+                    disabled={!account || !equipe1 || !equipe2}
+                    style={{ flex: 1 }}
+                  >
+                    <i className="bi bi-plus-circle"></i> Créer match simple
+                  </button>
+                  <button
+                    type="button"
+                    className="btn"
+                    disabled={!account || !equipe1 || !equipe2}
+                    style={{ flex: 1 }}
+                    onClick={handleCreerMatchAvecParis}
+                  >
+                    <i className="bi bi-stars"></i> Créer + Paris auto
+                  </button>
+                </div>
               </form>
 
               {/* Fixer résultat */}

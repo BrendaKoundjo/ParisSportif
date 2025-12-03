@@ -1,7 +1,9 @@
 # Paris Sportifs Web3 - README
 
 ##  **Description**
-Site de paris sportifs décentralisé sur Ethereum. Créez des matchs, pariez avec ETH, recevez gains automatiques (5% fee). Contrat Solidity + Frontend React.
+Site de paris sportifs décentralisé sur Ethereum. Créez des matchs, pariez avec ETH, recevez gains automatiques avec cotes dynamiques. Contrat Solidity unifié + Frontend React.
+
+![Demonstration](smartcontract.png)
 
 ## **Prérequis**
 - **Node.js** 18+ (`node --version`)
@@ -26,14 +28,12 @@ npm run dev
 ##  **Déployer Contrat (Remix)**
 
 1. **https://remix.ethereum.org**
-2. Créer 3 fichiers :
+2. Créer 1 fichier :
    ```
    contracts/
-   ├── Wallet.sol
-   ├── MatchManagement.sol
-   └── SportsBetting.sol
+   └── ParisSportifs.sol
    ```
-3. **Compiler** → Solidity 0.8.20
+3. **Compiler** → Solidity 0.8.20+
 4. **Deploy** → **Injected Provider - MetaMask** → **Sepolia**
 5.  **COPIER** : Adresse contrat + ABI
 
@@ -49,7 +49,7 @@ Chain ID: 11155111
 
 ### **ETH Gratuit**
 ```
-https://sepoliafaucet.com → Votre adresse → 1 ETH TEST
+https://sepolia-faucet.pk910.de/ → Votre adresse
 ```
 
 ## 🎮 **Utilisation**
@@ -57,25 +57,25 @@ https://sepoliafaucet.com → Votre adresse → 1 ETH TEST
 ```
 1. localhost:3000 → "Connecter Wallet"
 2. deposer() → 0.5 ETH (Metamask → Contrat)
-3. Créer Match → "PSG vs OM" (Match #1)
-4. Parier → Match 1, PSG, 0.1 ETH
+3. Créer Match → "PSG vs OM" (Match #1) 
+4. Parier → Match 1, PSG, 0.1 ETH (voir cotes dynamiques)
 5. Fixer Résultat → Match 1, PSG gagne
-6.  Gains automatiques ! (~0.47 ETH)
+6.  Gains automatiques selon la formule: Gain = Mise × Cote
 ```
 
 ##  **Structure Projet**
 
 ```
 paris-sportifs/
-├── contracts/           # Solidity (3 fichiers)
+├── contracts/           # Solidity (1 fichier unifié)
 ├── src/
-│   ├── App.js          # Frontend principal
+│   ├── App.jsx         # Frontend principal
 │   └── App.css         # Design
 ├── public/
 └── package.json
 ```
 
-##  **Configuration App.js**
+##  **Configuration App.jsx**
 
 ```jsx
 const CONTRACT_ADDRESS = '0xVotreAdresseRemix';
