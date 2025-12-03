@@ -1,5 +1,12 @@
 # Paris Sportifs Web3 - README
 
+##  **Groupe**
+Lamyae TALA
+Nehade EL MOKHTARI
+Ali FASSY FEHRY
+Marilson SOUZA
+Brenda KOUNDJO
+
 ##  **Description**
 Site de paris sportifs décentralisé sur Ethereum. Créez des matchs, pariez avec ETH, recevez gains automatiques avec cotes dynamiques. Contrat Solidity unifié + Frontend React.
 
