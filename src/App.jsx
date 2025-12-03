@@ -580,6 +580,11 @@ function App() {
   const [matchOdds, setMatchOdds] = useState({}); // {matchId: {odds: [1.5, 2.1, 5.0], probas: [40, 30, 10]}}
   const [potentialWinning, setPotentialWinning] = useState("0");
 
+  // Utility function to format ETH amounts
+  const formatETH = (amount, decimals = 4) => {
+    return Number(amount).toFixed(decimals);
+  };
+
   // Bankroll
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -948,7 +953,7 @@ function App() {
               <div className="amount-highlight">
                 <span>
                   <i className="bi bi-coin" style={{ marginRight: 4 }}></i>
-                  {solde}
+                  {formatETH(solde)}
                 </span>{" "}
                 ETH
                 <div className="small text-muted">Solde interne</div>
@@ -1209,8 +1214,8 @@ function App() {
                             className="bi bi-graph-up-arrow"
                             style={{ marginRight: 4 }}
                           ></i>
-                          Mises – {m.equipe1}: {m.mises1} ETH, {m.equipe2}:{" "}
-                          {m.mises2} ETH, Nul: {m.misesEgalite} ETH
+                          Mises – {m.equipe1}: {formatETH(m.mises1)} ETH, {m.equipe2}:{" "}
+                          {formatETH(m.mises2)} ETH, Nul: {formatETH(m.misesEgalite)} ETH
                         </span>
                       </div>
 
